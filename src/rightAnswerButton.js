@@ -6,7 +6,7 @@ const RightAnswerButton = ({ index, increaseContestantScore }) => {
 
   return <> 
   {/* {console.log("Key: ", index)} */}
-  <button onClick={() => increaseContestantScore(index)}>Correct</button>
+  <button onClick={() => increaseContestantScore(index)}>✅</button>
   </>
 }
 

@@ -1,5 +1,6 @@
 class Contestant {
-  constructor(name) {
+  constructor(name, id) {
+    this.id = id
     this.name = name,
     this.rightAnswers = 0
     this.wrongAnswers = 0
