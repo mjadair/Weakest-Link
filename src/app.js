@@ -14,10 +14,22 @@ const App = () => {
   const [contestants, setContestants] = useState([])
   const [moneyChain, setMoneyChain] = useState([0, 20, 50, 100, 200, 300, 450, 600, 800, 1000])
   const [answerChain, setAnswerChain] = useState(0)
+  const [strongestLink, setStrongestLink] = useState('')
+  const [weakestLink, setWeakestLink] = useState('')
   const [pot, setPot] = useState(0)
 
 
+  function isStrongestLink() {
+    const strongestLink = contestants.reduce((max, contestant) => max.rightAnswers > contestant.rightAnswers ? max : contestant)
+    setStrongestLink(strongestLink)
+  }
 
+
+  function isWeakestLink() {
+    const weakestLink = contestants.reduce((max, contestant) => max.wrongAnswers > contestant.wrongAnswers ? max : contestant)
+
+    setWeakestLink(weakestLink)
+  }
 
 
   function handleSubmit(event) {
@@ -28,7 +40,7 @@ const App = () => {
       const allContestants = contestants
       allContestants.push(contestant)
       setContestants([...allContestants])
-      console.log(contestants)
+      // console.log(contestants)
     }
     return
 
@@ -45,7 +57,8 @@ const App = () => {
     allContestants[key].totalRightAnswers += 1
     setContestants([...allContestants])
     answerChain < 9 ? setAnswerChain(answerChain + 1) : null
-    console.log(answerChain)
+    isStrongestLink()
+    isWeakestLink()
   }
 
   function wrongAnswer(key) {
@@ -54,6 +67,8 @@ const App = () => {
     allContestants[key].wrongAnswers += 1
     allContestants[key].totalWrongAnswers += 1
     setContestants([...allContestants])
+    isStrongestLink()
+    isWeakestLink()
 
   }
 
@@ -79,10 +94,13 @@ const App = () => {
     <div >{contestants.map((contestant, key) => {
       return <div className="contestants " key={key}>
         <p >Name: {contestant.name}</p>
+        <p>{strongestLink.name === contestant.name ? 'STRONGEST LINK' : console.log(contestant.name, 'is not the strongest link')}</p>
+       <p>{weakestLink.name === contestant.name ? 'WEAKEST LINK' : console.log(contestant.name, 'is not the weakest link')}</p>
         <p >Right Answers: {contestant.rightAnswers}</p>
         <p >Incorrect Answers: {contestant.wrongAnswers}</p>
         <span> <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
           <WrongAnswerButton index={key} wrongAnswer={wrongAnswer} /> </span>
+       
       </div>
     })}</div>
 
