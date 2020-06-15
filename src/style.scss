@@ -1,14 +1,62 @@
+.columns{
+  display: flex
+}
+
+
+
+.contestant-column{
+  width: 75%;
+}
+
+.money-column{
+  width: 25%;
+  min-height: 100%;
+}
+
+
 .money-chain{
   display: flex;
   color:blue;
   flex-direction: column-reverse;
-  align-items: flex-end;
+  align-items: center;
+  min-height: 100%;
+
+  .value-disc{
+    margin-top: 1vh;
+    text-align: center;
+    width: 50%;
+    border: 1px solid black;
+    border-radius: 50%;
+  }
+
+.banked-value{
+  margin-bottom: -3vh;
+  background-color: red;
+  color: black
 }
 
+.not-banked-value{
+margin-bottom: 1vh;
+color: white;
+background-color: blue;
+}
 
 .current-value{
-  color: red;
+  margin-bottom: 1vh;
+  color: white;
+  background-color: red;
 }
+
+
+.pot-amount{
+  width: 12%;
+  position: fixed;
+  margin-top: 6vh;
+}
+
+}
+
+
 
 
 .contestants {

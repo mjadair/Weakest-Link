@@ -91,24 +91,33 @@ const App = () => {
       <input type="submit" value="Submit" />
     </form>
 
-    <div >{contestants.map((contestant, key) => {
-      return <div className="contestants " key={key}>
-        <p >Name: {contestant.name}</p>
-        <p>{strongestLink.name === contestant.name ? 'STRONGEST LINK' : console.log(contestant.name, 'is not the strongest link')}</p>
-       <p>{weakestLink.name === contestant.name ? 'WEAKEST LINK' : console.log(contestant.name, 'is not the weakest link')}</p>
-        <p >Right Answers: {contestant.rightAnswers}</p>
-        <p >Incorrect Answers: {contestant.wrongAnswers}</p>
-        <span> <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
-          <WrongAnswerButton index={key} wrongAnswer={wrongAnswer} /> </span>
-       
+    <div className="columns">
+      <div className="contestant-column">
+        <div >{contestants.map((contestant, key) => {
+          return <div className="contestants " key={key}>
+            <p >Name: {contestant.name}</p>
+            <p>{strongestLink.name === contestant.name ? 'STRONGEST LINK' : null}</p>
+            <p>{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p>
+            <p >Right Answers: {contestant.rightAnswers}</p>
+            <p >Incorrect Answers: {contestant.wrongAnswers}</p>
+            <span> <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
+              <WrongAnswerButton index={key} wrongAnswer={wrongAnswer} /> </span>
+            <BankButton bank={bank} />
+          </div>
+        })}</div>
       </div>
-    })}</div>
 
-    <div className="money-chain">{moneyChain.map((amount, key) => {
-      return <div className={answerChain === key ? 'current-value' : ''} key={key}>{amount}</div>
-    })}</div>
+      <div className="money-column">
+        <div className="money-chain">
+          <div className="value-disc pot-amount">{pot}</div>
+          {moneyChain.map((amount, key) => {
+            return <div className={`value-disc ${answerChain >= key ? 'banked-value' : 'not-banked-value'} ${answerChain === key ? 'current-value' : ''}`} key={key}>{amount}</div>
+          })}
 
-    <BankButton bank={bank} />
+        </div>
+      </div>
+
+    </div>
 
 
   </>
