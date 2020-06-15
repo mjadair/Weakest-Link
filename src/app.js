@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import Contestant from './models/contestant'
+import RightAnswerButton from './rightAnswerButton'
 
 
 
@@ -14,12 +15,15 @@ const App = () => {
 
   function handleSubmit(event) {
     event.preventDefault()
-    setFormValue('')
-    const contestant = new Contestant(event.target[0].value)
-    const allContestants = contestants
-    allContestants.push(contestant)
-    setContestants([...allContestants])
-
+    if (formValue != '') {
+      setFormValue('')
+      const contestant = new Contestant(event.target[0].value)
+      const allContestants = contestants
+      allContestants.push(contestant)
+      setContestants([...allContestants])
+      console.log(contestants)
+    }
+    return
 
   }
 
@@ -28,11 +32,16 @@ const App = () => {
   }
 
 
+  function increaseContestantScore(key) {
+    console.log(key)
+    const allContestants = contestants
+    allContestants[key].rightAnswers += 1
+    allContestants[key].totalRightAnswers += 1
+    setContestants([...allContestants])
+  }
 
 
-
-
-  return <>
+  return <> 
     <form onSubmit={() => handleSubmit(event)}>
       <label>
         <input type="text" name="name" value={formValue} onChange={() => handleChange(event)} />
@@ -42,9 +51,10 @@ const App = () => {
 
     <div>{contestants.map((contestant, key) => {
       return <div key={key}>
-        <p >{contestant.name}</p>
-        <p >{contestant.rightAnswers}</p>
-
+        <p >Name: {contestant.name}</p>
+        <p >Right Answers: {contestant.rightAnswers}</p>
+        <p >Incorrect Answers: {contestant.wrongAnswers}</p>
+        <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
       </div>
     })}</div>
 
