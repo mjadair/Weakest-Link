@@ -4,9 +4,9 @@ class Contestant {
     this.name = name,
     this.rightAnswers = 0
     this.wrongAnswers = 0
-    this.bankedMoney = 0
     this.totalRightAnswers = 0
     this.totalWrongAnswers = 0
+    this.moneyBanked = 0
   }
 
   newRound() {

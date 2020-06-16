@@ -1,9 +1,9 @@
 import React from 'react'
 
-const BankButton = ({ bank }) => {
+const BankButton = ({ index, bank }) => {
   return <>
 
-<button onClick={bank}>BANK!</button>
+<button onClick={() => bank(index)}>BANK!</button>
 
   </>
 }

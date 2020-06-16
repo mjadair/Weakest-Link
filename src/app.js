@@ -73,11 +73,15 @@ const App = () => {
   }
 
 
-  function bank() {
+  function bank(index) {
     let kitty = pot
     kitty += moneyChain[answerChain]
+    const allContestants = contestants
+    allContestants[index].moneyBanked += moneyChain[answerChain]
+    setContestants([...allContestants])
     setPot(kitty)
     setAnswerChain(0)
+    console.log(contestants[index])
 
   }
 
@@ -102,7 +106,7 @@ const App = () => {
             <p >Incorrect Answers: {contestant.wrongAnswers}</p>
             <span> <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
               <WrongAnswerButton index={key} wrongAnswer={wrongAnswer} /> </span>
-            <BankButton bank={bank} />
+            <BankButton index={key} bank={bank} />
           </div>
         })}</div>
       </div>
