@@ -5,6 +5,8 @@ import RightAnswerButton from './rightAnswerButton'
 import BankButton from './Bank'
 import WrongAnswerButton from './WrongAnswer'
 
+// import { bank, wrongAnswer, increaseContestantScore, handleChange, handleSubmit, isWeakestLink, isStrongestLink } from './functions/Functions'
+
 import './style.scss'
 
 
@@ -17,6 +19,7 @@ const App = () => {
   const [strongestLink, setStrongestLink] = useState('')
   const [weakestLink, setWeakestLink] = useState('')
   const [pot, setPot] = useState(0)
+  const [clock, setClock] = useState(false)
 
 
   function isStrongestLink() {
@@ -24,13 +27,10 @@ const App = () => {
     setStrongestLink(strongestLink)
   }
 
-
   function isWeakestLink() {
     const weakestLink = contestants.reduce((max, contestant) => max.wrongAnswers > contestant.wrongAnswers ? max : contestant)
-
     setWeakestLink(weakestLink)
   }
-
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -40,16 +40,13 @@ const App = () => {
       const allContestants = contestants
       allContestants.push(contestant)
       setContestants([...allContestants])
-      // console.log(contestants)
     }
     return
-
   }
 
   function handleChange(event) {
     setFormValue(event.target.value)
   }
-
 
   function increaseContestantScore(key) {
     const allContestants = contestants
@@ -69,10 +66,7 @@ const App = () => {
     setContestants([...allContestants])
     isStrongestLink()
     isWeakestLink()
-
   }
-
-
   function bank(index) {
     let kitty = pot
     kitty += moneyChain[answerChain]
@@ -81,12 +75,30 @@ const App = () => {
     setContestants([...allContestants])
     setPot(kitty)
     setAnswerChain(0)
-    console.log(contestants[index])
+  }
+  function startTheClock(time) {
+    let countdown = clock
+    if (!countdown) {
+      countdown = time
+      setClock(countdown)
+      const timerInterval = setInterval(() => {
+        console.log("clock", clock)
+        countdown -= 1
+        setClock(countdown)
+        if (!countdown) {
+          
+          clearInterval(timerInterval)
+        }
 
+      }, 1000)
+    }
+    return
   }
 
 
   return <>
+    <button onClick={() => startTheClock(10)}>Start the Clock</button>
+    <h1>{clock}</h1>
     <h1>{pot ? `You have £${pot} in the pot!` : ''}</h1>
     <form onSubmit={() => handleSubmit(event)}>
       <label>
@@ -117,15 +129,14 @@ const App = () => {
           {moneyChain.map((amount, key) => {
             return <div className={`value-disc ${answerChain >= key ? 'banked-value' : 'not-banked-value'} ${answerChain === key ? 'current-value' : ''}`} key={key}>{amount}</div>
           })}
-
         </div>
       </div>
-
     </div>
-
-
   </>
 }
+
+
+
 
 ReactDOM.render(
   <App />,
