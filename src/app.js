@@ -4,12 +4,11 @@ import Contestant from './models/contestant'
 import RightAnswerButton from './rightAnswerButton'
 import BankButton from './Bank'
 import WrongAnswerButton from './WrongAnswer'
+import moment from 'moment'
 
 // import { bank, wrongAnswer, increaseContestantScore, handleChange, handleSubmit, isWeakestLink, isStrongestLink } from './functions/Functions'
 
 import './style.scss'
-
-
 
 const App = () => {
   const [formValue, setFormValue] = useState('')
@@ -80,24 +79,20 @@ const App = () => {
     let countdown = clock
     if (!countdown) {
       countdown = time
-      setClock(countdown)
+      setClock(moment(countdown.toString(), 's').format('mm:ss'))
       const timerInterval = setInterval(() => {
-        console.log("clock", clock)
         countdown -= 1
-        setClock(countdown)
+        setClock(moment(countdown.toString(), 'ss').format('mm:ss'))
         if (!countdown) {
-          
           clearInterval(timerInterval)
         }
-
       }, 1000)
     }
     return
   }
 
-
   return <>
-    <button onClick={() => startTheClock(10)}>Start the Clock</button>
+    <button onClick={() => startTheClock(60)}>Start the Clock</button>
     <h1>{clock}</h1>
     <h1>{pot ? `You have £${pot} in the pot!` : ''}</h1>
     <form onSubmit={() => handleSubmit(event)}>
@@ -134,9 +129,6 @@ const App = () => {
     </div>
   </>
 }
-
-
-
 
 ReactDOM.render(
   <App />,
