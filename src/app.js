@@ -4,6 +4,7 @@ import Contestant from './models/contestant'
 import RightAnswerButton from './rightAnswerButton'
 import BankButton from './Bank'
 import WrongAnswerButton from './WrongAnswer'
+import Timer from 'react-compound-timer'
 import moment from 'moment'
 
 // import { bank, wrongAnswer, increaseContestantScore, handleChange, handleSubmit, isWeakestLink, isStrongestLink } from './functions/Functions'
@@ -82,7 +83,7 @@ const App = () => {
       setClock(moment(countdown.toString(), 's').format('mm:ss'))
       const timerInterval = setInterval(() => {
         countdown -= 1
-        setClock(moment(countdown.toString(), 'ss').format('mm:ss'))
+        setClock(moment(countdown.toString(), 'mm:ss').format('mm:ss'))
         if (!countdown) {
           clearInterval(timerInterval)
         }
@@ -92,8 +93,30 @@ const App = () => {
   }
 
   return <>
-    <button onClick={() => startTheClock(60)}>Start the Clock</button>
-    <h1>{clock}</h1>
+    {/* <button onClick={() => startTheClock(30)}>Start the Clock</button> */}
+    <Timer
+      initialTime={55000}
+      startImmediately={false}
+      direction="backward"
+      onStart={() => console.log('onStart hook')}
+      onStop={() => console.log('onStop hook')}
+      onReset={() => console.log('onReset hook')}
+    >
+      {({ start, resume, pause, stop, reset, getTimerState, getTime }) => (
+        <React.Fragment>
+          <div className="timer">
+            0<Timer.Minutes />:<Timer.Seconds />
+          </div>
+          <br />
+          <div>
+            <button onClick={start}>Start the Clock</button>
+            <button onClick={stop}>Stop</button>
+            <button onClick={reset}>Reset</button>
+          </div>
+        </React.Fragment>
+      )}
+    </Timer>
+    {/* <h1>{clock}</h1> */}
     <h1>{pot ? `You have £${pot} in the pot!` : ''}</h1>
     <form onSubmit={() => handleSubmit(event)}>
       <label>
