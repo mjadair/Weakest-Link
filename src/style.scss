@@ -16,10 +16,11 @@
 
 .money-chain{
   display: flex;
-  color:blue;
+  color: silver;
   flex-direction: column-reverse;
   align-items: center;
   min-height: 100%;
+  perspective: 1000px;
 
   .value-disc{
     height: 9.09%;
@@ -28,30 +29,42 @@
     width: 50%;
     border: 1px solid black;
     border-radius: 50%;
+    box-shadow: 0.5vh 0.5vw;
   }
 
 .banked-value{
   margin-bottom: -3vh;
-  background-color: red;
-  color: black
+  background-color: rgb(137, 21, 25);
+  color: black;
+  box-shadow: 0.5vh 0.5vw;
 }
 
 .not-banked-value{
 margin-bottom: 1vh;
 color: white;
-background-color: blue;
+background-color: rgb(39, 86, 136);
+background-image: linear-gradient(
+  to right, 
+  rgba(255, 255, 255, 0.13) 0%,
+  rgba(255, 255, 255, 0.13) 77%,
+  rgba(255, 255, 255, 0.5) 92%,
+  rgba(255, 255, 255, 0.0) 100%
+);
+box-shadow: 0.5vh 0.5vw;
 }
 
 .current-value{
   margin-bottom: 1vh;
   color: white;
-  background-color: red;
+  background-color: rgb(137, 21, 25);
+  box-shadow: 0.5vh 0.5vw;
 }
 
 
 .pot-amount{
   // width: 12%;
   margin-top: 6vh;
+  background-color: rgb(139, 143, 138);
 }
 
 }

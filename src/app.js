@@ -9,6 +9,10 @@ import moment from 'moment'
 
 // import { bank, wrongAnswer, increaseContestantScore, handleChange, handleSubmit, isWeakestLink, isStrongestLink } from './functions/Functions'
 
+const quizAudio = new Audio('./audio/quiz_audio.mp3')
+
+// const questionAudio = new Audio(quizAudio)
+
 import './style.scss'
 
 const App = () => {
@@ -20,6 +24,7 @@ const App = () => {
   const [weakestLink, setWeakestLink] = useState('')
   const [pot, setPot] = useState(0)
   const [clock, setClock] = useState(false)
+  const [music, setMusic] = useState(quizAudio)
 
 
   function isStrongestLink() {
@@ -92,13 +97,19 @@ const App = () => {
     return
   }
 
+
+  function playAudio(){
+    music.play()
+  }
+
   return <>
+  {console.log(Timer)}
     {/* <button onClick={() => startTheClock(30)}>Start the Clock</button> */}
     <Timer
-      initialTime={55000}
+      initialTime={83000}
       startImmediately={false}
       direction="backward"
-      onStart={() => console.log('onStart hook')}
+      onStart={() => playAudio()}
       onStop={() => console.log('onStop hook')}
       onReset={() => console.log('onReset hook')}
     >
