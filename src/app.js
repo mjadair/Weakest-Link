@@ -3,15 +3,11 @@ import ReactDOM from 'react-dom'
 import Contestant from './models/contestant'
 import RightAnswerButton from './rightAnswerButton'
 import BankButton from './Bank'
+import WeakestLinkButton from './WeakestLinkButton'
 import WrongAnswerButton from './WrongAnswer'
 import Timer from 'react-compound-timer'
-import moment from 'moment'
-
-// import { bank, wrongAnswer, increaseContestantScore, handleChange, handleSubmit, isWeakestLink, isStrongestLink } from './functions/Functions'
 
 const quizAudio = new Audio('./audio/quiz_audio.mp3')
-
-// const questionAudio = new Audio(quizAudio)
 
 import './style.scss'
 
@@ -28,6 +24,7 @@ const App = () => {
   const [currentContestant, setCurrentContestant] = useState('')
 
 
+  //Functions to set Strongest and Weakest Links ========================================
   function isStrongestLink() {
     const strongestLink = contestants.reduce((max, contestant) => max.rightAnswers > contestant.rightAnswers ? max : contestant)
     setStrongestLink(strongestLink)
@@ -38,9 +35,11 @@ const App = () => {
     setWeakestLink(weakestLink)
   }
 
+
+  //Form Change and Submit functions to add contestants ======================================
   function handleSubmit(event) {
     event.preventDefault()
-    if (formValue != '') {
+    if (formValue !== '') {
       setFormValue('')
       const contestant = new Contestant(event.target[0].value, contestants.length + 1)
       const allContestants = contestants
@@ -54,6 +53,9 @@ const App = () => {
     setFormValue(event.target.value)
   }
 
+
+
+  // Increases contestant Score on right answers ==================================================
   function increaseContestantScore(key) {
     const allContestants = contestants
     allContestants[key].rightAnswers += 1
@@ -65,6 +67,7 @@ const App = () => {
     isWeakestLink()
   }
 
+  // Decreases contestant score on wrong answers ===================================================
   function wrongAnswer(key) {
     setAnswerChain(0)
     const allContestants = contestants
@@ -75,6 +78,8 @@ const App = () => {
     isStrongestLink()
     isWeakestLink()
   }
+
+  // Bank logic ================================================================================
   function bank(index) {
     let kitty = pot
     kitty += moneyChain[answerChain]
@@ -86,6 +91,7 @@ const App = () => {
   }
 
 
+  // Starts the round =======================================================================
   function startTheClock() {
     setIsPlaying(true)
     music.play()
@@ -96,18 +102,17 @@ const App = () => {
       return contestant
     })
     setContestants([...resetScores])
-    console.log(contestants)
-
-
+    setAnswerChain(0)
   }
 
-
+  // Ends the round =========================================================================
   function stopTheClock() {
     music.pause()
 
 
   }
 
+  //Resets the music when clock resets =====================================================
   function resetClock() {
     setIsPlaying(false)
     music.pause()
@@ -116,11 +121,18 @@ const App = () => {
   }
 
 
+  //Removes a contestant ===================================================================
+  function youAreTheWeakestLink(contestantIndex) {
+    const remainingContestants = contestants.filter((contestant, index) => {
+      return index !== contestantIndex
+    })
+    setContestants([...remainingContestants])
+  }
+
+
 
 
   return <>
-    {console.log(contestants)}
-    {/* <button onClick={() => startTheClock(30)}>Start the Clock</button> */}
     <Timer
       initialTime={83000}
       startImmediately={false}
@@ -129,7 +141,7 @@ const App = () => {
       onStop={() => stopTheClock()}
       onReset={() => resetClock()}
     >
-      {({ start, resume, pause, stop, reset, getTimerState, getTime }) => (
+      {({ start, stop, reset, getTimerState }) => (
         <React.Fragment>
           <div className="timer">
             0<Timer.Minutes />:<Timer.Seconds />
@@ -143,8 +155,7 @@ const App = () => {
         </React.Fragment>
       )}
     </Timer>
-    {/* <h1>{clock}</h1> */}
-    <h1>{pot ? `You have £${pot} in the pot!` : ''}</h1>
+
     <form onSubmit={() => handleSubmit(event)}>
       <label>
         <input type="text" name="name" value={formValue} onChange={() => handleChange(event)} />
@@ -181,9 +192,7 @@ const App = () => {
               <p>{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p>
               <p >Right Answers: {contestant.rightAnswers}</p>
               <p >Incorrect Answers: {contestant.wrongAnswers}</p>
-              <span> <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
-                <WrongAnswerButton index={key} wrongAnswer={wrongAnswer} /> </span>
-              <BankButton index={key} bank={bank} />
+              <WeakestLinkButton index={key} youAreTheWeakestLink={youAreTheWeakestLink} />
             </div>
           })}</div>}
       </div>
