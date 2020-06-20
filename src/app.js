@@ -81,37 +81,37 @@ const App = () => {
     setPot(kitty)
     setAnswerChain(0)
   }
-  function startTheClock(time) {
-    let countdown = clock
-    if (!countdown) {
-      countdown = time
-      setClock(moment(countdown.toString(), 's').format('mm:ss'))
-      const timerInterval = setInterval(() => {
-        countdown -= 1
-        setClock(moment(countdown.toString(), 'mm:ss').format('mm:ss'))
-        if (!countdown) {
-          clearInterval(timerInterval)
-        }
-      }, 1000)
-    }
-    return
-  }
 
 
-  function playAudio(){
+  function startTheClock() {
     music.play()
   }
 
+
+  function stopTheClock() {
+    music.pause()
+    
+
+  }
+
+  function resetClock(){
+    music.currentTime = 0
+
+  }
+
+
+
+
   return <>
-  {console.log(Timer)}
+    {console.log(Timer)}
     {/* <button onClick={() => startTheClock(30)}>Start the Clock</button> */}
     <Timer
       initialTime={83000}
       startImmediately={false}
       direction="backward"
-      onStart={() => playAudio()}
-      onStop={() => console.log('onStop hook')}
-      onReset={() => console.log('onReset hook')}
+      onStart={() => startTheClock()}
+      onStop={() => stopTheClock()}
+      onReset={() => resetClock()}
     >
       {({ start, resume, pause, stop, reset, getTimerState, getTime }) => (
         <React.Fragment>
