@@ -23,8 +23,9 @@ const App = () => {
   const [strongestLink, setStrongestLink] = useState('')
   const [weakestLink, setWeakestLink] = useState('')
   const [pot, setPot] = useState(0)
-  const [clock, setClock] = useState(false)
   const [music, setMusic] = useState(quizAudio)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentContestant, setCurrentContestant] = useState('')
 
 
   function isStrongestLink() {
@@ -41,7 +42,7 @@ const App = () => {
     event.preventDefault()
     if (formValue != '') {
       setFormValue('')
-      const contestant = new Contestant(event.target[0].value, contestants.length)
+      const contestant = new Contestant(event.target[0].value, contestants.length + 1)
       const allContestants = contestants
       allContestants.push(contestant)
       setContestants([...allContestants])
@@ -58,6 +59,7 @@ const App = () => {
     allContestants[key].rightAnswers += 1
     allContestants[key].totalRightAnswers += 1
     setContestants([...allContestants])
+    setCurrentContestant(currentContestant.id === contestants.length ? contestants[0] : contestants[currentContestant.id])
     answerChain < 9 ? setAnswerChain(answerChain + 1) : null
     isStrongestLink()
     isWeakestLink()
@@ -69,6 +71,7 @@ const App = () => {
     allContestants[key].wrongAnswers += 1
     allContestants[key].totalWrongAnswers += 1
     setContestants([...allContestants])
+    setCurrentContestant(currentContestant.id === contestants.length ? contestants[0] : contestants[currentContestant.id])
     isStrongestLink()
     isWeakestLink()
   }
@@ -84,17 +87,30 @@ const App = () => {
 
 
   function startTheClock() {
+    setIsPlaying(true)
     music.play()
+    setCurrentContestant(strongestLink ? strongestLink : contestants[0])
+    const resetScores = contestants.map((contestant) => {
+      contestant.rightAnswers = 0
+      contestant.wrongAnswers = 0
+      return contestant
+    })
+    setContestants([...resetScores])
+    console.log(contestants)
+
+
   }
 
 
   function stopTheClock() {
     music.pause()
-    
+
 
   }
 
-  function resetClock(){
+  function resetClock() {
+    setIsPlaying(false)
+    music.pause()
     music.currentTime = 0
 
   }
@@ -103,7 +119,7 @@ const App = () => {
 
 
   return <>
-    {console.log(Timer)}
+    {console.log(contestants)}
     {/* <button onClick={() => startTheClock(30)}>Start the Clock</button> */}
     <Timer
       initialTime={83000}
@@ -120,9 +136,9 @@ const App = () => {
           </div>
           <br />
           <div>
+            {getTimerState() === 'STOPPED' ? reset() : null}
             <button onClick={start}>Start the Clock</button>
             <button onClick={stop}>Stop</button>
-            <button onClick={reset}>Reset</button>
           </div>
         </React.Fragment>
       )}
@@ -138,18 +154,38 @@ const App = () => {
 
     <div className="columns">
       <div className="contestant-column">
-        <div >{contestants.map((contestant, key) => {
-          return <div className="contestants " key={key}>
-            <p >Name: {contestant.name}</p>
-            <p>{strongestLink.name === contestant.name ? 'STRONGEST LINK' : null}</p>
-            <p>{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p>
-            <p >Right Answers: {contestant.rightAnswers}</p>
-            <p >Incorrect Answers: {contestant.wrongAnswers}</p>
-            <span> <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
-              <WrongAnswerButton index={key} wrongAnswer={wrongAnswer} /> </span>
-            <BankButton index={key} bank={bank} />
+
+        {isPlaying ?
+
+          <div className="contestants " key={currentContestant.id - 1}>
+            <p >Name: {currentContestant.name}</p>
+            <p>{strongestLink.name === currentContestant.name ? 'STRONGEST LINK' : null}</p>
+            <p>{weakestLink.name === currentContestant.name ? 'WEAKEST LINK' : null}</p>
+            <p >Right Answers: {currentContestant.rightAnswers}</p>
+            <p >Incorrect Answers: {currentContestant.wrongAnswers}</p>
+            <span> <RightAnswerButton index={currentContestant.id - 1} increaseContestantScore={increaseContestantScore} />
+              <WrongAnswerButton index={currentContestant.id - 1} wrongAnswer={wrongAnswer} /> </span>
+            <BankButton index={currentContestant.id - 1} bank={bank} />
           </div>
-        })}</div>
+
+
+          :
+
+
+
+
+          <div >{contestants.map((contestant, key) => {
+            return <div className="contestants " key={key}>
+              <p >Name: {contestant.name}</p>
+              <p>{strongestLink.name === contestant.name ? 'STRONGEST LINK' : null}</p>
+              <p>{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p>
+              <p >Right Answers: {contestant.rightAnswers}</p>
+              <p >Incorrect Answers: {contestant.wrongAnswers}</p>
+              <span> <RightAnswerButton index={key} increaseContestantScore={increaseContestantScore} />
+                <WrongAnswerButton index={key} wrongAnswer={wrongAnswer} /> </span>
+              <BankButton index={key} bank={bank} />
+            </div>
+          })}</div>}
       </div>
 
       <div className="money-column">
