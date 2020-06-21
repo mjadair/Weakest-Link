@@ -216,8 +216,8 @@ const App = () => {
           <div >{contestants.map((contestant, key) => {
             return <div className="contestants " key={key}>
               <p className="name">{contestant.name}</p>
-              <p className="strongest-link">{strongestLink.name === contestant.name ? 'STRONGEST LINK' : null}</p>
-              <p className="weakest-link">{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p>
+              {/* <p className="strongest-link">{strongestLink.name === contestant.name ? 'STRONGEST LINK' : null}</p>
+              <p className="weakest-link">{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p> */}
               <p >Right Answers: {contestant.rightAnswers}</p>
               <p >Incorrect Answers: {contestant.wrongAnswers}</p>
               <WeakestLinkButton index={key} youAreTheWeakestLink={youAreTheWeakestLink} />
