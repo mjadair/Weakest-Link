@@ -25,8 +25,8 @@ const App = () => {
 
 
   //Functions to set Strongest and Weakest Links ========================================
-  function isStrongestLink() {
-    const strongestLink = contestants.reduce((max, contestant) => max.rightAnswers > contestant.rightAnswers ? max : contestant)
+  function isStrongestLink(remainingContestants = contestants) {
+    const strongestLink = remainingContestants.reduce((max, contestant) => max.rightAnswers > contestant.rightAnswers ? max : contestant)
     setStrongestLink(strongestLink)
   }
 
@@ -126,43 +126,63 @@ const App = () => {
     const remainingContestants = contestants.filter((contestant, index) => {
       return index !== contestantIndex
     })
+
+    remainingContestants.forEach((contestant, index) => {
+      remainingContestants[index].id = index + 1
+    })
+
+    console.log(remainingContestants)
+    // console.log(remainingContestants)
+    isStrongestLink(remainingContestants)
     setContestants([...remainingContestants])
-    isStrongestLink()
+    // .then(console.log("new contestants: ", contestants))
+
+    // console.log(strongestLink)
   }
 
 
 
 
   return <>
-    <Timer
-      initialTime={83000}
-      startImmediately={false}
-      direction="backward"
-      onStart={() => startTheClock()}
-      onStop={() => stopTheClock()}
-      onReset={() => resetClock()}
-    >
-      {({ start, stop, reset, getTimerState }) => (
-        <React.Fragment>
-          <div className="timer">
-            0<Timer.Minutes />:<Timer.Seconds />
-          </div>
-          <br />
-          <div>
-            {getTimerState() === 'STOPPED' ? reset() : null}
-            <button onClick={start}>Start the Clock</button>
-            <button onClick={stop}>Stop</button>
-          </div>
-        </React.Fragment>
-      )}
-    </Timer>
+    <div className="top">
+      <div>
+        <Timer
+          initialTime={83000}
+          startImmediately={false}
+          direction="backward"
+          onStart={() => startTheClock()}
+          onStop={() => stopTheClock()}
+          onReset={() => resetClock()}
+        >
+          {({ start, stop, reset, getTimerState }) => (
+            <React.Fragment>
+              <div className="timer">
+                0<Timer.Minutes />:<Timer.Seconds />
+              </div>
+              <br />
+              <div>
+                {getTimerState() === 'STOPPED' ? reset() : null}
+                <button onClick={start}>Start the Clock</button>
+                <button onClick={stop}>Stop</button>
+              </div>
+            </React.Fragment>
+          )}
+        </Timer>
 
-    <form onSubmit={() => handleSubmit(event)}>
-      <label>
-        <input type="text" name="name" value={formValue} onChange={() => handleChange(event)} />
-      </label>
-      <input type="submit" value="Submit" />
-    </form>
+
+        {/* {console.log(<Timer.Seconds />)} */}
+
+        <form onSubmit={() => handleSubmit(event)}>
+          <label>
+            <input type="text" name="name" value={formValue} onChange={() => handleChange(event)} />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+
+      </div>
+      <img className="logo" src="./Images/Logo.png" />
+
+    </div>
 
     <div className="columns">
       <div className="contestant-column">
@@ -200,6 +220,7 @@ const App = () => {
 
       <div className="money-column">
 
+
         {isPlaying ?
           <div className="money-chain">
             <div className="value-disc pot-amount">{pot}</div>
@@ -212,6 +233,8 @@ const App = () => {
         }
 
       </div>
+
+      {!isPlaying && strongestLink ? <p className="summary"> At the end of the round {strongestLink.name} is the strongest link, they answered {strongestLink.rightAnswers} questions correctly. With {weakestLink.wrongAnswers} incorrect answers, {weakestLink.name} is the Weakest Link. But who will the contestants decide is the Weakest Link?</p> : null}
     </div>
   </>
 }
