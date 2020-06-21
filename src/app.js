@@ -8,6 +8,7 @@ import WrongAnswerButton from './WrongAnswer'
 import Timer from 'react-compound-timer'
 
 const quizAudio = new Audio('./audio/quiz_audio.mp3')
+const loser = new Audio('/audio/loser_theme.mp3')
 
 import './style.scss'
 
@@ -20,6 +21,7 @@ const App = () => {
   const [weakestLink, setWeakestLink] = useState('')
   const [pot, setPot] = useState(0)
   const [music, setMusic] = useState(quizAudio)
+  const [loserAudio, setLoserAudio] = useState(loser)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentContestant, setCurrentContestant] = useState('')
 
@@ -93,6 +95,8 @@ const App = () => {
 
   // Starts the round =======================================================================
   function startTheClock() {
+    loserAudio.pause()
+    loserAudio.currentTime = 0
     setIsPlaying(true)
     music.play()
     setCurrentContestant(strongestLink ? strongestLink : contestants[0])
@@ -115,6 +119,8 @@ const App = () => {
   //Resets the music when clock resets =====================================================
   function resetClock() {
     setIsPlaying(false)
+    loserAudio.pause()
+    loserAudio.currentTime = 0
     music.pause()
     music.currentTime = 0
 
@@ -123,6 +129,7 @@ const App = () => {
 
   //Removes a contestant ===================================================================
   function youAreTheWeakestLink(contestantIndex) {
+    loserAudio.play()
     const remainingContestants = contestants.filter((contestant, index) => {
       return index !== contestantIndex
     })
