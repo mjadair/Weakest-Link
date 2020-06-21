@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+
+html{
+  background-color: black;
+  font-family: 'Staatliches', cursive;
+}
+
+
 .columns{
   display: flex
 }
@@ -5,6 +13,7 @@
 
 
 .contestant-column{
+  color: whitesmoke;
   width: 75%;
 }
 
@@ -70,9 +79,27 @@ box-shadow: 0.5vh 0.5vw;
 }
 
 
+.weakest-link{
+color: red;
+}
+
+.strongest-link{
+  color: lightseagreen;
+}
+
 
 
 .contestants {
+  
+  text-align: center;
+  border: 4px solid whitesmoke;
+  border-radius: 50%;
   margin-top: 1vh;
-  border: 4px solid black;
+  background-color: rgb(16, 73, 219);
+}
+
+
+.name{
+  font-size: 4vw;
+
 }

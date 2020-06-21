@@ -6,7 +6,7 @@ const WrongAnswerButton = ({ index, wrongAnswer }) => {
 
   return <> 
   {/* {console.log("Key: ", index)} */}
-  <button onClick={() => wrongAnswer(index)}>☠️</button>
+  <button onClick={() => wrongAnswer(index)}>❌</button>
   </>
 }
 

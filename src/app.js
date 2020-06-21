@@ -127,6 +127,7 @@ const App = () => {
       return index !== contestantIndex
     })
     setContestants([...remainingContestants])
+    isStrongestLink()
   }
 
 
@@ -169,11 +170,11 @@ const App = () => {
         {isPlaying ?
 
           <div className="contestants " key={currentContestant.id - 1}>
-            <p >Name: {currentContestant.name}</p>
-            <p>{strongestLink.name === currentContestant.name ? 'STRONGEST LINK' : null}</p>
-            <p>{weakestLink.name === currentContestant.name ? 'WEAKEST LINK' : null}</p>
-            <p >Right Answers: {currentContestant.rightAnswers}</p>
-            <p >Incorrect Answers: {currentContestant.wrongAnswers}</p>
+            <p className="name">{currentContestant.name}</p>
+            {/* <p>{strongestLink.name === currentContestant.name ? 'STRONGEST LINK' : null}</p>
+            <p>{weakestLink.name === currentContestant.name ? 'WEAKEST LINK' : null}</p> */}
+            {/* <p >Right Answers: {currentContestant.rightAnswers}</p>
+            <p >Incorrect Answers: {currentContestant.wrongAnswers}</p> */}
             <span> <RightAnswerButton index={currentContestant.id - 1} increaseContestantScore={increaseContestantScore} />
               <WrongAnswerButton index={currentContestant.id - 1} wrongAnswer={wrongAnswer} /> </span>
             <BankButton index={currentContestant.id - 1} bank={bank} />
@@ -187,9 +188,9 @@ const App = () => {
 
           <div >{contestants.map((contestant, key) => {
             return <div className="contestants " key={key}>
-              <p >Name: {contestant.name}</p>
-              <p>{strongestLink.name === contestant.name ? 'STRONGEST LINK' : null}</p>
-              <p>{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p>
+              <p className="name">{contestant.name}</p>
+              <p className="strongest-link">{strongestLink.name === contestant.name ? 'STRONGEST LINK' : null}</p>
+              <p className="weakest-link">{weakestLink.name === contestant.name ? 'WEAKEST LINK' : null}</p>
               <p >Right Answers: {contestant.rightAnswers}</p>
               <p >Incorrect Answers: {contestant.wrongAnswers}</p>
               <WeakestLinkButton index={key} youAreTheWeakestLink={youAreTheWeakestLink} />
@@ -198,12 +199,18 @@ const App = () => {
       </div>
 
       <div className="money-column">
-        <div className="money-chain">
-          <div className="value-disc pot-amount">{pot}</div>
-          {moneyChain.map((amount, key) => {
-            return <div className={`value-disc ${answerChain >= key ? 'banked-value' : 'not-banked-value'} ${answerChain === key ? 'current-value' : ''}`} key={key}>{amount}</div>
-          })}
-        </div>
+
+        {isPlaying ?
+          <div className="money-chain">
+            <div className="value-disc pot-amount">{pot}</div>
+            {moneyChain.map((amount, key) => {
+              return <div className={`value-disc ${answerChain >= key ? 'banked-value' : 'not-banked-value'} ${answerChain === key ? 'current-value' : ''}`} key={key}>{amount}</div>
+            })}
+          </div>
+          :
+          null
+        }
+
       </div>
     </div>
   </>
